@@ -33,8 +33,14 @@ router.delete('/:contactId', async (req, res, next) => {
   res.status(200).json({ message: 'Contact Deleted' });
 });
 
-router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
+router.put('/:contactId', async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await model.updateContact(contactId, req.body);
+  if (!result) {
+    res.status(404).json({ message: 'Not Found' });
+  }
+
+  res.status(200).json(result);
 });
 
 export default router;
