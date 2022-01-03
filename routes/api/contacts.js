@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import model from '../../model/index.js';
+import { validateCreation, validateUpdate } from './validation';
 
 const router = new Router();
 
@@ -19,7 +20,7 @@ router.get('/:contactId', async (req, res, next) => {
   res.status(200).json(result);
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', validateCreation, async (req, res, next) => {
   const newContact = await model.addContact(req.body);
   res.status(201).json(newContact);
 });
@@ -33,7 +34,7 @@ router.delete('/:contactId', async (req, res, next) => {
   res.status(200).json({ message: 'Contact Deleted' });
 });
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', validateUpdate, async (req, res, next) => {
   const { contactId } = req.params;
   const result = await model.updateContact(contactId, req.body);
   if (!result) {
