@@ -1,7 +1,9 @@
 // import fs from 'fs/promises';
-// import contacts from './contacts.json';
+import contacts from './contacts.json';
 
-const listContacts = async () => {};
+const listContacts = async () => {
+  return contacts;
+};
 
 const getContactById = async contactId => {};
 

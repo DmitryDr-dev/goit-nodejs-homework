@@ -1,9 +1,12 @@
 import { Router } from 'express';
+import model from '../../model/index.js';
 
 const router = new Router();
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  const result = await model.listContacts();
+  console.log(result);
+  res.status(200).json(result);
 });
 
 router.get('/:contactId', async (req, res, next) => {
