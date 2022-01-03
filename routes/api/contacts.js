@@ -10,7 +10,9 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  const { contactId } = req.params;
+  const result = await model.getContactById(contactId);
+  res.status(200).json(result);
 });
 
 router.post('/', async (req, res, next) => {

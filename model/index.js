@@ -5,7 +5,10 @@ const listContacts = async () => {
   return contacts;
 };
 
-const getContactById = async contactId => {};
+const getContactById = async contactId => {
+  const result = contacts.find(contact => contact.id === contactId);
+  return result;
+};
 
 const removeContact = async contactId => {};
 
