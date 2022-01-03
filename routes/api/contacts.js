@@ -20,7 +20,8 @@ router.get('/:contactId', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  const newContact = await model.addContact(req.body);
+  res.status(201).json(newContact);
 });
 
 router.delete('/:contactId', async (req, res, next) => {
