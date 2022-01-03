@@ -12,26 +12,31 @@ const listContacts = async () => {
 };
 
 const getContactById = async contactId => {
-  const result = contacts.find(contact => contact.id === contactId);
-  return result;
+  try {
+    const contactToSearch = contacts.find(contact => contact.id === contactId);
+    return contactToSearch;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
 
 const removeContact = async contactId => {
   try {
-    const indexToDelete = contacts.findIndex(
-      contact => contact.id === contactId,
-    );
+    const contactToDelete = contacts.find(contact => contact.id === contactId);
 
-    if (indexToDelete === -1) {
+    if (!contactToDelete) {
       throw new Error('Contact not found');
     }
 
-    const newContacts = contacts.filter(contact => contact.id !== contactId);
+    const updatedContactList = contacts.filter(
+      contact => contact.id !== contactId,
+    );
     await fs.writeFile(
       path.join(__dirname, 'contacts.json'),
-      JSON.stringify(newContacts, null, 2),
+      JSON.stringify(updatedContactList, null, 2),
     );
-    return newContacts;
+    return contactToDelete;
   } catch (error) {
     console.log(error);
     return null;
