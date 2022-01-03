@@ -1,18 +1,34 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { randomUUID } from 'crypto';
-import contacts from './contacts.json';
+// import contacts from './contacts.json';
 import { fileURLToPath } from 'url';
 import { writeFile } from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const listContacts = async () => {
-  return contacts;
+  try {
+    const data = await fs.readFile(
+      path.join(__dirname, 'contacts.json'),
+      'utf-8',
+    );
+
+    const contacts = JSON.parse(data);
+    return contacts;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
 
 const getContactById = async contactId => {
   try {
+    const data = await fs.readFile(
+      path.join(__dirname, 'contacts.json'),
+      'utf-8',
+    );
+    const contacts = JSON.parse(data);
     const contactToSearch = contacts.find(contact => contact.id === contactId);
     return contactToSearch;
   } catch (error) {
@@ -23,6 +39,11 @@ const getContactById = async contactId => {
 
 const removeContact = async contactId => {
   try {
+    const data = await fs.readFile(
+      path.join(__dirname, 'contacts.json'),
+      'utf-8',
+    );
+    const contacts = JSON.parse(data);
     const contactToDelete = contacts.find(contact => contact.id === contactId);
 
     if (!contactToDelete) {
@@ -46,7 +67,15 @@ const removeContact = async contactId => {
 const addContact = async body => {
   try {
     const newContact = { id: randomUUID(), ...body };
+
+    const data = await fs.readFile(
+      path.join(__dirname, 'contacts.json'),
+      'utf-8',
+    );
+
+    const contacts = JSON.parse(data);
     const newData = [...contacts, newContact];
+
     await fs.writeFile(
       path.join(__dirname, 'contacts.json'),
       JSON.stringify(newData, null, 2),
@@ -59,6 +88,12 @@ const addContact = async body => {
 
 const updateContact = async (contactId, body) => {
   try {
+    const data = await fs.readFile(
+      path.join(__dirname, 'contacts.json'),
+      'utf-8',
+    );
+
+    const contacts = JSON.parse(data);
     const contactToUpdate = contacts.find(contact => contact.id === contactId);
 
     if (!contactToUpdate) {
