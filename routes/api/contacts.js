@@ -12,6 +12,10 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   const result = await model.getContactById(contactId);
+  if (!result) {
+    res.status(404).json({ message: 'Not Found' });
+  }
+
   res.status(200).json(result);
 });
 
