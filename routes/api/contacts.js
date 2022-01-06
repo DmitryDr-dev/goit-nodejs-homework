@@ -10,6 +10,7 @@ router.get('/', contactsControllers.getContacts);
 router.get('/:contactId', contactsControllers.getContactById);
 router.post('/', contactsControllers.addContact);
 router.delete('/:contactId', contactsControllers.removeContact);
+router.put('/:contactId', contactsControllers.updateContact);
 // router.get('/:contactId', async (req, res, next) => {
 //   const { contactId } = req.params;
 //   const result = await model.getContactById(contactId);
@@ -20,10 +21,10 @@ router.delete('/:contactId', contactsControllers.removeContact);
 //   res.status(200).json(result);
 // });
 
-router.post('/', validateCreation, async (req, res, next) => {
-  const newContact = await model.addContact(req.body);
-  res.status(201).json(newContact);
-});
+// router.post('/', validateCreation, async (req, res, next) => {
+//   const newContact = await model.addContact(req.body);
+//   res.status(201).json(newContact);
+// });
 
 // router.delete('/:contactId', async (req, res, next) => {
 //   const { contactId } = req.params;
@@ -34,14 +35,14 @@ router.post('/', validateCreation, async (req, res, next) => {
 //   res.status(200).json({ message: 'Contact Deleted' });
 // });
 
-router.put('/:contactId', validateUpdate, async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await model.updateContact(contactId, req.body);
-  if (!result) {
-    res.status(404).json({ message: 'Not Found' });
-  }
+// router.put('/:contactId', validateUpdate, async (req, res, next) => {
+//   const { contactId } = req.params;
+//   const result = await model.updateContact(contactId, req.body);
+//   if (!result) {
+//     res.status(404).json({ message: 'Not Found' });
+//   }
 
-  res.status(200).json(result);
-});
+//   res.status(200).json(result);
+// });
 
 export default router;
