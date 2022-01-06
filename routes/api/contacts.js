@@ -8,7 +8,7 @@ const router = new Router();
 
 router.get('/', contactsControllers.getContacts);
 router.get('/:contactId', contactsControllers.getContactById);
-
+router.delete('/:contactId', contactsControllers.removeContact);
 // router.get('/:contactId', async (req, res, next) => {
 //   const { contactId } = req.params;
 //   const result = await model.getContactById(contactId);
@@ -24,14 +24,14 @@ router.post('/', validateCreation, async (req, res, next) => {
   res.status(201).json(newContact);
 });
 
-router.delete('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await model.removeContact(contactId);
-  if (!result) {
-    res.status(404).json({ message: 'Not Found' });
-  }
-  res.status(200).json({ message: 'Contact Deleted' });
-});
+// router.delete('/:contactId', async (req, res, next) => {
+//   const { contactId } = req.params;
+//   const result = await model.removeContact(contactId);
+//   if (!result) {
+//     res.status(404).json({ message: 'Not Found' });
+//   }
+//   res.status(200).json({ message: 'Contact Deleted' });
+// });
 
 router.put('/:contactId', validateUpdate, async (req, res, next) => {
   const { contactId } = req.params;
