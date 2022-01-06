@@ -1,14 +1,12 @@
 import { Router } from 'express';
+import contactsControllers from '../../controllers/contacts';
+
 import model from '../../model/index.js';
 import { validateCreation, validateUpdate } from './validation';
 
 const router = new Router();
 
-router.get('/', async (req, res, next) => {
-  const result = await model.listContacts();
-  console.log(result);
-  res.status(200).json(result);
-});
+router.get('/', contactsControllers.getContacts);
 
 router.get('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
