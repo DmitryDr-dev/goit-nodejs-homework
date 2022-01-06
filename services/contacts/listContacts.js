@@ -1,6 +1,12 @@
 import Contact from '../../model/contact';
+import { ResultStatus } from '../../lib/constants';
 
 export async function listContacts() {
-  const result = await Contact.find();
-  return result;
+  try {
+    const result = await Contact.find();
+    return { status: ResultStatus.SUCCESS, data: result };
+  } catch (error) {
+    console.error(`Error occurred on getting messages ${error.message}`);
+    return { status: ResultStatus.ERROR, data: null };
+  }
 }
