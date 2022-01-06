@@ -7,16 +7,17 @@ import { validateCreation, validateUpdate } from './validation';
 const router = new Router();
 
 router.get('/', contactsControllers.getContacts);
+router.get('/:contactId', contactsControllers.getContactById);
 
-router.get('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await model.getContactById(contactId);
-  if (!result) {
-    res.status(404).json({ message: 'Not Found' });
-  }
+// router.get('/:contactId', async (req, res, next) => {
+//   const { contactId } = req.params;
+//   const result = await model.getContactById(contactId);
+//   if (!result) {
+//     res.status(404).json({ message: 'Not Found' });
+//   }
 
-  res.status(200).json(result);
-});
+//   res.status(200).json(result);
+// });
 
 router.post('/', validateCreation, async (req, res, next) => {
   const newContact = await model.addContact(req.body);
