@@ -8,6 +8,7 @@ const router = new Router();
 
 router.get('/', contactsControllers.getContacts);
 router.get('/:contactId', contactsControllers.getContactById);
+router.post('/', contactsControllers.addContact);
 router.delete('/:contactId', contactsControllers.removeContact);
 // router.get('/:contactId', async (req, res, next) => {
 //   const { contactId } = req.params;
