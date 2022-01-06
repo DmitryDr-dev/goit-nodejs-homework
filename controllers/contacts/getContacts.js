@@ -8,7 +8,7 @@ export async function getContacts(req, res, next) {
     return res.status(HttpCode.OK).json({
       status: ResultStatus.SUCCESS,
       code: HttpCode.OK,
-      data: { ...result.data },
+      data: result.data,
     });
   }
 
