@@ -13,6 +13,10 @@ router.get('/:contactId', contactsControllers.getContactById);
 router.post('/', validateCreation, contactsControllers.addContact);
 router.delete('/:contactId', contactsControllers.removeContact);
 router.put('/:contactId', validateUpdate, contactsControllers.updateContact);
-router.patch('/:contactId/favorite', validateUpdateFavorite);
+router.patch(
+  '/:contactId/favorite',
+  validateUpdateFavorite,
+  contactsControllers.updateContact,
+);
 
 export default router;

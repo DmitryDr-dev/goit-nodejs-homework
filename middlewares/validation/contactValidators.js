@@ -1,6 +1,4 @@
-import Joi from 'joi';
 import { ResultStatus, HttpCode } from '../../lib/constants';
-import mongoose from 'mongoose';
 import {
   createSchema,
   updateSchema,
@@ -45,4 +43,6 @@ export const validateUpdateFavorite = async (req, res, next) => {
       message: `missing field favorite: ${error.message.replace(/"/g, '')}`,
     });
   }
+
+  next();
 };
