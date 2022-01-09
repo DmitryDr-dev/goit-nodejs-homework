@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 import { Subscription } from '../lib/constants';
 
 const { Schema, model } = mongoose;
@@ -16,7 +17,7 @@ const userSchema = new Schema(
       validate(value) {
         const re =
           /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
-        return re.test(String(value).trim().toLowerCase);
+        return re.test(String(value).trim().toLowerCase());
       },
     },
     password: {
@@ -49,6 +50,14 @@ const userSchema = new Schema(
     toObject: { virtuals: true },
   },
 );
+
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    const salt = await bcrypt.genSalt(6);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+  next();
+});
 
 const User = model('user', userSchema);
 
