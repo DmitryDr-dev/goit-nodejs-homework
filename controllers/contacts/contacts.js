@@ -63,7 +63,6 @@ const removeContact = async (req, res, next) => {
 const addContact = async (req, res, next) => {
   const { id: userId } = res.locals.user;
   const result = await contactService.addContact(userId, req.body);
-  console.log(result);
 
   if (!result) {
     return res.status(HttpCode.NOT_IMPLEMENTED).json({

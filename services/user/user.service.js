@@ -29,7 +29,7 @@ class UserService {
     }
   }
 
-  async getUser(email, password) {
+  async isUserValid(email, password) {
     try {
       const user = await this.userRepository.findByEmail(email);
       const isPassportValid = await user?.isValidPassport(password);

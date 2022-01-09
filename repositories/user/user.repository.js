@@ -8,7 +8,7 @@ class UserRepository {
   }
 
   async findById(id) {
-    return await this.model.findOne({ id });
+    return await this.model.findById(id);
   }
 
   async createUser(body) {

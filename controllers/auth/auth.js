@@ -20,7 +20,7 @@ const signUpUser = async (req, res, next) => {
 
 const logInUser = async (req, res, next) => {
   const { email, password } = req.body;
-  const user = await userService.getUser(email, password);
+  const user = await userService.isUserValid(email, password);
   if (!user) {
     return res.status(HttpCode.UNAUTHORIZED).json({
       status: ResultStatus.ERROR,
@@ -52,4 +52,29 @@ const logOutUser = async (req, res, next) => {
     .json({ status: ResultStatus.SUCCESS, code: HttpCode.OK });
 };
 
-export default { signUpUser, logInUser, logOutUser };
+const getCurrentUser = async (req, res, next) => {
+  const { id: userId } = res.locals.user;
+  const user = await userService.findUserById(userId);
+  if (!user) {
+    return res.status(HttpCode.UNAUTHORIZED).json({
+      status: ResultStatus.ERROR,
+      code: HttpCode.UNAUTHORIZED,
+      message: 'Invalid Credentials',
+    });
+  }
+
+  const token = authService.getToken(user);
+  await authService.setToken(user.id, token);
+
+  res.status(HttpCode.OK).json({
+    status: ResultStatus.SUCCESS,
+    code: HttpCode.OK,
+    data: {
+      name: user.name,
+      email: user.email,
+      subscription: user.subscription,
+    },
+  });
+};
+
+export default { signUpUser, logInUser, logOutUser, getCurrentUser };

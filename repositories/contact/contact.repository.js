@@ -4,14 +4,7 @@ class ContactRepository {
   }
 
   async addContact(userId, body) {
-    const result = await this.model
-      .create({ ...body, owner: userId })
-      .populate({
-        path: 'owner',
-        select: 'name age subscription',
-      });
-
-    return result;
+    return await this.model.create({ ...body, owner: userId });
   }
 
   async getContactById(userId, contactId) {

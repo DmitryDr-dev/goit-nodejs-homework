@@ -46,12 +46,9 @@ class ContactService {
   async addContact(userId, body) {
     try {
       const result = await this.contactRepository.addContact(userId, body);
-      console.log(result);
       return result;
     } catch (error) {
-      console.error(
-        `Error occurred on deleting selected contact: ${error.message}`,
-      );
+      console.error(`Error occurred on creating new contact: ${error.message}`);
       return null;
     }
   }
@@ -66,7 +63,7 @@ class ContactService {
       return result;
     } catch (error) {
       console.error(
-        `Error occurred on deleting selected contact: ${error.message}`,
+        `Error occurred on updating selected contact: ${error.message}`,
       );
       return null;
     }
