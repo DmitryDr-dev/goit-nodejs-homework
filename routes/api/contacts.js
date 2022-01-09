@@ -4,7 +4,7 @@ import {
   validateCreation,
   validateUpdate,
   validateUpdateFavorite,
-} from '../../middlewares/validation/contactValidators';
+} from '../../middlewares/validation/contact/contactValidators';
 import { guard } from '../../middlewares/guard';
 
 const router = new Router();
