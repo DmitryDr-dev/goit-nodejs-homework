@@ -45,6 +45,11 @@ const logInUser = async (req, res, next) => {
   });
 };
 
-const logOutUser = async (req, res, next) => {};
+const logOutUser = async (req, res, next) => {
+  await authService.setToken(req.user.id, null);
+  res
+    .status(HttpCode.NO_CONTENT)
+    .json({ status: ResultStatus.SUCCESS, code: HttpCode.OK });
+};
 
 export default { signUpUser, logInUser, logOutUser };

@@ -5,16 +5,23 @@ import {
   validateUpdate,
   validateUpdateFavorite,
 } from '../../middlewares/validation/contactValidators';
+import { guard } from '../../middlewares/guard';
 
 const router = new Router();
 
-router.get('/', contactsControllers.getContacts);
-router.get('/:contactId', contactsControllers.getContactById);
-router.post('/', validateCreation, contactsControllers.addContact);
-router.delete('/:contactId', contactsControllers.removeContact);
-router.put('/:contactId', validateUpdate, contactsControllers.updateContact);
+router.get('/', guard, contactsControllers.getContacts);
+router.get('/:contactId', guard, contactsControllers.getContactById);
+router.post('/', guard, validateCreation, contactsControllers.addContact);
+router.delete('/:contactId', guard, contactsControllers.removeContact);
+router.put(
+  '/:contactId',
+  guard,
+  validateUpdate,
+  contactsControllers.updateContact,
+);
 router.patch(
   '/:contactId/favorite',
+  guard,
   validateUpdateFavorite,
   contactsControllers.updateContact,
 );

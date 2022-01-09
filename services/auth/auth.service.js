@@ -17,6 +17,15 @@ class AuthService {
   async setToken(id, token) {
     await this.userRepository.updateToken(id, token);
   }
+
+  async isTokenValid(token) {
+    try {
+      const verify = jwt.verify(token, SECRET_KEY);
+      return !!verify;
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 export default AuthService;

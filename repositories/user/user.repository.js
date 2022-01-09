@@ -7,6 +7,10 @@ class UserRepository {
     return await this.model.findOne({ email });
   }
 
+  async findById(id) {
+    return await this.model.findOne({ id });
+  }
+
   async createUser(body) {
     return await this.model(body).save();
   }

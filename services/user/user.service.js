@@ -14,23 +14,45 @@ class UserService {
   }
 
   async createUser(body) {
-    const { email, subscription } = await this.userRepository.createUser(body);
+    try {
+      const { email, subscription } = await this.userRepository.createUser(
+        body,
+      );
 
-    return {
-      email,
-      subscription,
-    };
+      return {
+        email,
+        subscription,
+      };
+    } catch (error) {
+      console.error(`Error occurred on creating user: ${error.message}`);
+      return null;
+    }
   }
 
   async getUser(email, password) {
-    const user = await this.userRepository.findByEmail(email);
-    const isPassportValid = await user?.isValidPassport(password);
+    try {
+      const user = await this.userRepository.findByEmail(email);
+      const isPassportValid = await user?.isValidPassport(password);
 
-    if (!isPassportValid) {
+      if (!isPassportValid) {
+        return null;
+      }
+
+      return user;
+    } catch (error) {
+      console.error(`Error occurred on fetching user: ${error.message}`);
       return null;
     }
+  }
 
-    return user;
+  async findUserById(id) {
+    try {
+      const user = await this.userRepository.findById(id);
+      return user;
+    } catch (error) {
+      console.error(`Error occurred on fetching user: ${error.message}`);
+      return null;
+    }
   }
 }
 
