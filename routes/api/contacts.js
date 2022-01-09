@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import contactsControllers from '../../controllers/contacts';
+import contactsControllers from '../../controllers/contacts/contacts';
 import {
   validateCreation,
   validateUpdate,

@@ -4,9 +4,7 @@ import { authService, userService } from '../services';
 
 export const guard = async (req, res, next) => {
   const token = req.get('Authorization')?.split(' ')[1];
-  console.log(token);
   const isValid = authService.isTokenValid(token);
-  console.log('isValid', isValid);
 
   if (!token || !isValid) {
     return res.status(HttpCode.UNAUTHORIZED).json({
