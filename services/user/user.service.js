@@ -1,5 +1,3 @@
-import { ResultStatus } from '../../lib/constants';
-
 class UserService {
   constructor(userRepository) {
     this.userRepository = userRepository;
@@ -22,6 +20,17 @@ class UserService {
       email,
       subscription,
     };
+  }
+
+  async getUser(email, password) {
+    const user = await this.userRepository.findByEmail(email);
+    const isPassportValid = await user?.isValidPassport(password);
+
+    if (!isPassportValid) {
+      return null;
+    }
+
+    return user;
   }
 }
 

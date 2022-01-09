@@ -1,4 +1,4 @@
-import { userService } from '../../services';
+import { userService, authService } from '../../services';
 import { HttpCode, ResultStatus } from '../../lib/constants';
 
 const signUpUser = async (req, res, next) => {
@@ -8,7 +8,7 @@ const signUpUser = async (req, res, next) => {
     return res.status(HttpCode.CONFLICT).json({
       status: ResultStatus.ERROR,
       code: HttpCode.CONFLICT,
-      message: 'Invalid credentials',
+      message: 'Email in Use',
     });
   }
 
@@ -17,7 +17,34 @@ const signUpUser = async (req, res, next) => {
     .status(HttpCode.OK)
     .json({ status: ResultStatus.SUCCESS, code: HttpCode.OK, data });
 };
-const logInUser = (req, res, next) => {};
-const logOutUser = (req, res, next) => {};
+
+const logInUser = async (req, res, next) => {
+  const { email, password } = req.body;
+  const user = await userService.getUser(email, password);
+  if (!user) {
+    return res.status(HttpCode.UNAUTHORIZED).json({
+      status: ResultStatus.ERROR,
+      code: HttpCode.UNAUTHORIZED,
+      message: 'Invalid Credentials',
+    });
+  }
+
+  const token = authService.getToken(user);
+  await authService.setToken(user.id, token);
+
+  res.status(HttpCode.OK).json({
+    status: ResultStatus.SUCCESS,
+    code: HttpCode.OK,
+    data: {
+      token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    },
+  });
+};
+
+const logOutUser = async (req, res, next) => {};
 
 export default { signUpUser, logInUser, logOutUser };
