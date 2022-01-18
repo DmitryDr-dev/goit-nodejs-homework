@@ -1,4 +1,4 @@
-import { ResultStatus, HttpCode } from '../../lib/constants';
+import { ResultStatus, HttpCode } from '../../../lib/constants';
 import {
   createSchema,
   updateSchema,

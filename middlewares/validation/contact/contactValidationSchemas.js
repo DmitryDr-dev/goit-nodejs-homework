@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { MAX_AGE, MIN_AGE } from '../../lib/constants';
+import { MAX_AGE, MIN_AGE } from '../../../lib/constants';
 
 export const createSchema = Joi.object({
   name: Joi.string().min(2).required(),
