@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import { Subscription } from '../lib/constants';
-import gravatar from 'gravatar/lib/gravatar';
+import gravatar from 'gravatar';
 
 const { Schema, model } = mongoose;
 
