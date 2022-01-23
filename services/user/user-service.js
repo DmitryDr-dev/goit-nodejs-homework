@@ -1,3 +1,7 @@
+import fs from 'fs/promises';
+import path from 'path';
+const AVATAR_DIR = process.env.AVATAR_DIR;
+
 class UserService {
   constructor(userRepository) {
     this.userRepository = userRepository;
@@ -53,6 +57,16 @@ class UserService {
       console.error(`Error occurred on fetching user: ${error.message}`);
       return null;
     }
+  }
+
+  async updateUserAvatar(file, user) {
+    const destinationDir = path.join(AVATAR_DIR, user.id);
+    await fs.mkdir(destinationDir, { recursive: true });
+    await fs.rename(file.path, path.join(destinationDir, file.filename));
+    const avatarUrl = path.normalize(path.join(user.id, file.filename));
+
+    await this.userRepository.updateAvatar(user.id, avatarUrl);
+    return avatarUrl;
   }
 }
 

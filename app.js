@@ -4,7 +4,7 @@ import cors from 'cors';
 import contactsRouter from './routes/api/contacts';
 import authRouter from './routes/api/auth';
 
-const AVATAR_FOLDER = process.env.AVATAR_FOLDER;
+const AVATAR_DIR = process.env.AVATAR_DIR;
 
 const app = express();
 
@@ -13,7 +13,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
-app.use(express.static(AVATAR_FOLDER));
+app.use(express.static(AVATAR_DIR));
 
 app.use('/api/contacts', contactsRouter);
 app.use('/api/users', authRouter);

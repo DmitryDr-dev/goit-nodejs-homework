@@ -1,4 +1,4 @@
-import { userService, authService } from '../../services';
+import { userService, authService, FileStorage } from '../../services';
 import { HttpCode, ResultStatus } from '../../lib/constants';
 
 const signUpUser = async (req, res, next) => {
@@ -77,4 +77,34 @@ const getCurrentUser = async (req, res, next) => {
   });
 };
 
-export default { signUpUser, logInUser, logOutUser, getCurrentUser };
+const updateAvatar = async (req, res, next) => {
+  const file = req.file;
+  const user = res.locals.user;
+
+  const fileStorage = new FileStorage(file, user);
+  const avatarUrl = await fileStorage.updateAvatar();
+
+  if (avatarUrl) {
+    return res.status(HttpCode.OK).json({
+      status: ResultStatus.SUCCESS,
+      code: HttpCode.OK,
+      data: {
+        avatarUrl,
+      },
+    });
+  }
+
+  return res.status(HttpCode.UNAUTHORIZED).json({
+    status: ResultStatus.ERROR,
+    code: HttpCode.UNAUTHORIZED,
+    message: 'Not authorized',
+  });
+};
+
+export default {
+  signUpUser,
+  logInUser,
+  logOutUser,
+  getCurrentUser,
+  updateAvatar,
+};
