@@ -18,6 +18,10 @@ class UserRepository {
   async updateToken(id, token) {
     return await this.model.updateOne({ _id: id }, { token });
   }
+
+  async updateAvatar(id, avatar) {
+    return await this.model.updateOne({ _id: id }, { avatar });
+  }
 }
 
 export default UserRepository;
