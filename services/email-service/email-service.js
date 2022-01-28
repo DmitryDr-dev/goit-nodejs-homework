@@ -11,7 +11,7 @@ class EmailService {
       case 'development':
         return 'https://ba35-185-159-162-46.ngrok.io';
       case 'production':
-        return 'http://heroku/';
+        return 'https://hwcontacts-api.herokuapp.com';
       default:
         return 'http://localhost:5000/';
     }
@@ -55,7 +55,7 @@ class EmailService {
 
     try {
       const result = await this.sender.send(message);
-
+      console.log(result);
       return true;
     } catch (error) {
       console.error(`Error occurred on sending email ${error.message}`);
