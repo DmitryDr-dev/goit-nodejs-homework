@@ -19,5 +19,7 @@ router.patch(
   upload.single('avatar'),
   authControllers.updateAvatar,
 );
+router.get('/verify/:id', authControllers.verifyUser);
+router.post('/verify', authControllers.resendEmailForVerifyingUser);
 
 export default router;

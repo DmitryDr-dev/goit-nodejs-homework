@@ -19,13 +19,13 @@ class UserService {
 
   async createUser(body) {
     try {
-      const { email, subscription } = await this.userRepository.createUser(
-        body,
-      );
+      const { email, subscription, verifyToken } =
+        await this.userRepository.createUser(body);
 
       return {
         email,
         subscription,
+        verifyToken,
       };
     } catch (error) {
       console.error(`Error occurred on creating user: ${error.message}`);
@@ -38,7 +38,7 @@ class UserService {
       const user = await this.userRepository.findByEmail(email);
       const isPassportValid = await user?.isValidPassport(password);
 
-      if (!isPassportValid) {
+      if (!isPassportValid || !user?.isVerified) {
         return null;
       }
 

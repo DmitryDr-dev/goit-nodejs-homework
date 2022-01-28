@@ -26,6 +26,17 @@ class AuthService {
       return false;
     }
   }
+
+  async findUserByVerifyToken(token) {
+    const user = await this.userRepository.findUserByVerifyToken(token);
+
+    if (user) {
+      await this.userRepository.updateVerifyToken(user.id, true);
+      return user;
+    }
+
+    return false;
+  }
 }
 
 export default AuthService;
