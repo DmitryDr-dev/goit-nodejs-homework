@@ -1,4 +1,10 @@
-import { userService, authService, FileStorage } from '../../services';
+import {
+  userService,
+  authService,
+  FileStorage,
+  EmailService,
+  Mailer,
+} from '../../services';
 import { HttpCode, ResultStatus } from '../../lib/constants';
 
 const signUpUser = async (req, res, next) => {
@@ -12,10 +18,22 @@ const signUpUser = async (req, res, next) => {
     });
   }
 
-  const data = await userService.createUser(req.body);
-  res
-    .status(HttpCode.OK)
-    .json({ status: ResultStatus.SUCCESS, code: HttpCode.OK, data });
+  const userData = await userService.createUser(req.body);
+  const emailService = new EmailService(process.env.NODE_ENV, new Mailer());
+
+  await emailService.sendVerifyingEmail(
+    email,
+    userData.name,
+    userData.verifyToken,
+  );
+
+  delete userData.verifyToken;
+
+  res.status(HttpCode.OK).json({
+    status: ResultStatus.SUCCESS,
+    code: HttpCode.OK,
+    data: { ...userData },
+  });
 };
 
 const logInUser = async (req, res, next) => {
@@ -101,10 +119,76 @@ const updateAvatar = async (req, res, next) => {
   });
 };
 
+const verifyUser = async (req, res, next) => {
+  const verifyToken = req.params.id;
+  const user = await authService.findUserByVerifyToken(verifyToken);
+
+  if (user) {
+    return res.status(HttpCode.OK).json({
+      status: ResultStatus.SUCCESS,
+      code: HttpCode.OK,
+      data: {
+        message: 'Success',
+      },
+    });
+  }
+
+  return res.status(HttpCode.BAD_REQUEST).json({
+    status: ResultStatus.ERROR,
+    code: HttpCode.BAD_REQUEST,
+    data: {
+      message: 'Invalid Token',
+    },
+  });
+};
+
+const resendEmailForVerifyingUser = async (req, res, next) => {
+  const { email } = req.body;
+  const user = await userService.doesUserExist(email);
+
+  if (user) {
+    const { email, name, verifyToken } = user;
+    const emailService = new EmailService(process.env.NODE_ENV, new Mailer());
+    const result = await emailService.sendVerifyingEmail(
+      email,
+      name,
+      verifyToken,
+    );
+
+    if (result) {
+      return res.status(HttpCode.OK).json({
+        status: ResultStatus.SUCCESS,
+        code: HttpCode.OK,
+        data: {
+          message: 'Success',
+        },
+      });
+    }
+
+    return res.status(HttpCode.SERVICE_UNAVAILABLE).json({
+      status: ResultStatus.ERROR,
+      code: HttpCode.SERVICE_UNAVAILABLE,
+      data: {
+        message: 'Service Unavailable',
+      },
+    });
+  }
+
+  return res.status(HttpCode.NOT_FOUND).json({
+    status: ResultStatus.ERROR,
+    code: HttpCode.NOT_FOUND,
+    data: {
+      message: 'User not found',
+    },
+  });
+};
+
 export default {
   signUpUser,
   logInUser,
   logOutUser,
   getCurrentUser,
   updateAvatar,
+  verifyUser,
+  resendEmailForVerifyingUser,
 };
